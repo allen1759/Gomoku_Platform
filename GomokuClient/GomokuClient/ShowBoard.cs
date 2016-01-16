@@ -15,6 +15,9 @@ namespace Gomoku
 {
     public partial class ShowBoard : Form
     {
+        Graphics g;
+        Image imageBlack, imageWhite;
+
         public Form1 fatherForm;
         public int whichSide;
         public int[,] map;
@@ -26,42 +29,26 @@ namespace Gomoku
         {
             InitializeComponent();
 
-            //if( whichSide==1 )
-            //{
-            //    while( true )
-            //    {
-            //        String output = myStreamReader.ReadLine();
-            //        int I = getI(output);
-            //        int J = getJ(output);
-            //        fatherForm.sendMsg("paly " + output);
-            //        map[I, J] = 1;
-
-
-            //    }
-            //}
-            //else if( whichSide==2)
-            //{
-            //    while( true)
-            //    {
-            //        // input
-            //    }
-            //}
+            //imageBlack = Image.FromFile("../../black.png");
+            //imageWhite = Image.FromFile("../../white.png");
         }
 
         public void UpdateBoard()
         {
-            for(int i=0; i<map.GetLength(0); i += 1)
+            // for(int i=0)
+            boardMsg.Text = "";
+            for (int i = 0; i < map.GetLength(0); i += 1)
             {
-                for(int j=0; j<map.GetLength(1); j += 1)
+                for (int j = 0; j < map.GetLength(1); j += 1)
                 {
                     if (map[i, j] == 1)
                         boardMsg.Text += "B ";
                     else if (map[i, j] == 2)
                         boardMsg.Text += "W ";
                     else
-                        boardMsg.Text += " ";
+                        boardMsg.Text += "  ";
                 }
-                boardMsg.Text += "\n";
+                boardMsg.Text += "\r\n";
             }
         }
 

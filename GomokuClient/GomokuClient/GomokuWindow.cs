@@ -158,7 +158,8 @@ namespace Gomoku
 
                     // board.Show(this);
                     board.Show();
-                    // this.Hide();
+                    board.FormClosed += new FormClosedEventHandler(ShowBoard_FormClosed);
+                    this.Hide();
                     
                     if( whichSide==1 )
                         myTurn();
@@ -166,7 +167,7 @@ namespace Gomoku
             }
             else if(words[0]=="play")
             {
-                MessageBox.Show("playing!!! " + words[1] + " " + words[2]);
+//                MessageBox.Show("playing!!! " + words[1] + " " + words[2]);
                 int I = getI(words[1]);
                 int J = getJ(words[2]);
                 map[I, J] = otherSide();
@@ -225,10 +226,18 @@ namespace Gomoku
         }
         private int getI(String word)
         {
-            return 15 - Int32.Parse(word);
+            try
+            {
+                return 15 - Int32.Parse(word);
+            }
+            catch
+            {
+                return -1;
+            }
         }
         private int getJ(String word)
         {
+            if (word[0] > 'O' || word[0] < 'A') return -1;
             return (word[0] - 'A');
         }
 
@@ -241,6 +250,12 @@ namespace Gomoku
             client.send("play " + output);
             map[I, J] = whichSide;
             board.UpdateBoard();
+        }
+
+        void ShowBoard_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ShowBoard sub = (ShowBoard)sender;
+            this.Show();
         }
     }
 }
