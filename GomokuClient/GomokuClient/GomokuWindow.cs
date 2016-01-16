@@ -165,17 +165,16 @@ namespace Gomoku
                         myTurn();
                 }
             }
-            else if(words[0]=="play")
+            else if(words[0]=="play" && words[1]!=account())
             {
 //                MessageBox.Show("playing!!! " + words[1] + " " + words[2]);
-                int I = getI(words[1]);
-                int J = getJ(words[2]);
+                int I = getI(words[2]);
+                int J = getJ(words[3]);
                 map[I, J] = otherSide();
                 board.UpdateBoard();
                 
-                myStreamWriter.WriteLine(words[1] + " " + words[2]);
+                myStreamWriter.WriteLine(words[2] + " " + words[3]);
                 myTurn();
-                // AllMessage.AppendText(msg + "\n");
             }
             return "OK";
         }
@@ -247,7 +246,7 @@ namespace Gomoku
             String[] words = output.Split(' ');
             int I = getI(words[0]);
             int J = getJ(words[1]);
-            client.send("play " + output);
+            client.send("play " + account() + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard();
         }
