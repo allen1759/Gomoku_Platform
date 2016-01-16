@@ -149,12 +149,12 @@ namespace Gomoku
                 else if(words[1] == "ready")
                 {
                     board = new ShowBoard();
-                    board.fatherForm = this;
-                    board.whichSide = whichSide;
+                    //board.fatherForm = this;
+                    //board.whichSide = whichSide;
                     board.map = map;
-                    board.myProcess = myProcess;
-                    board.myStreamWriter = myStreamWriter;
-                    board.myStreamReader = myStreamReader;
+                    //board.myProcess = myProcess;
+                    //board.myStreamWriter = myStreamWriter;
+                    //board.myStreamReader = myStreamReader;
 
                     // board.Show(this);
                     board.Show();
