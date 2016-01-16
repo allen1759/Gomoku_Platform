@@ -28,19 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.boardMsg = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // boardMsg
-            // 
-            this.boardMsg.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.boardMsg.Location = new System.Drawing.Point(12, 12);
-            this.boardMsg.Multiline = true;
-            this.boardMsg.Name = "boardMsg";
-            this.boardMsg.Size = new System.Drawing.Size(373, 377);
-            this.boardMsg.TabIndex = 0;
-            this.boardMsg.Visible = false;
             // 
             // button1
             // 
@@ -58,17 +47,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(832, 533);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.boardMsg);
             this.Name = "ShowBoard";
             this.Text = "ShowBoard";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox boardMsg;
         private System.Windows.Forms.Button button1;
     }
 }

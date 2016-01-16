@@ -23,6 +23,7 @@ namespace Gomoku
         ShowBoard board;
         // 1 = black, 2 = white
         int whichSide = 0;
+        int whoWin = 0;
         int[,] map = new int[15, 15];
         Process myProcess = new Process();
         StreamWriter myStreamWriter;
@@ -34,6 +35,7 @@ namespace Gomoku
 
             msgHandler = this.addMsg;
             isLogin = false;
+            Login.Enabled = false;
             fileName.ReadOnly = true;
 
             whichSide = 0;
@@ -56,22 +58,27 @@ namespace Gomoku
             {
                 NetSetting.serverIp = IPaddr.Text;
             }
-            Connect.Enabled = false;
+            client = NetSocket.connect(NetSetting.serverIp);
+            if (client == null)
+            {
+                AllMessage.AppendText("Cannont connect to this Server\r\n");
+            }
+            else
+            {
+                AllMessage.AppendText("Connect to Server: " + IPaddr.Text + "\r\n");
+                Connect.Enabled = false;
+                Login.Enabled = true;
+            }
         }
         private void Login_Click(object sender, EventArgs e)
         {
             // 防止空字串
             if (account().Length == 0)
             {
-                MessageBox.Show("請輸入帳號!");
+                AllMessage.AppendText("請輸入帳號!");
                 return;
             }
-            if (client == null)
-            {
-                client = NetSocket.connect(NetSetting.serverIp);
-                client.newListener(processMsgComeIn);
-                // client.send(user() + " : 新使用者進入!");
-            }
+            client.newListener(processMsgComeIn);
             if (!isLogin)
             {
                 client.send("cmd login " + account() + " " + pass());
@@ -133,7 +140,7 @@ namespace Gomoku
             {
                 if(words[1]== "loginsucess")
                 {
-                    MessageBox.Show("Login Successfully!!");
+                    AllMessage.AppendText("Login Successfully!!\r\n");
                     isLogin = true;
                     Login.Enabled = false;
                     Account.Enabled = false;
@@ -144,21 +151,17 @@ namespace Gomoku
                 }
                 else if(words[1] == "loginfail")
                 {
-                    MessageBox.Show("Login Failed!!");
+                    AllMessage.AppendText("Login Failed!!\r\n");
                 }
                 else if(words[1] == "ready")
                 {
                     board = new ShowBoard();
-                    //board.fatherForm = this;
-                    //board.whichSide = whichSide;
                     board.map = map;
-                    //board.myProcess = myProcess;
-                    //board.myStreamWriter = myStreamWriter;
-                    //board.myStreamReader = myStreamReader;
 
                     // board.Show(this);
                     board.Show();
                     board.FormClosed += new FormClosedEventHandler(ShowBoard_FormClosed);
+                    board.UpdateBoard();
                     this.Hide();
                     
                     if( whichSide==1 )
@@ -167,14 +170,24 @@ namespace Gomoku
             }
             else if(words[0]=="play" && words[1]!=account())
             {
-//                MessageBox.Show("playing!!! " + words[1] + " " + words[2]);
                 int I = getI(words[2]);
                 int J = getJ(words[3]);
                 map[I, J] = otherSide();
-                board.UpdateBoard();
-                
-                myStreamWriter.WriteLine(words[2] + " " + words[3]);
-                myTurn();
+                board.UpdateBoard(I, J, otherSide());
+                if( checkWin(I, J, otherSide()) )
+                {
+                    // end case
+                    if (otherSide() == 1)
+                        MessageBox.Show("Black Side Win!!!");
+                    else if (otherSide() == 2)
+                        MessageBox.Show("White Side Win!!!");
+                    whoWin = otherSide();
+                }
+                else
+                {
+                    myStreamWriter.WriteLine(words[2] + " " + words[3]);
+                    myTurn();
+                }
             }
             return "OK";
         }
@@ -194,6 +207,11 @@ namespace Gomoku
 
         private void Ready_Click(object sender, EventArgs e)
         {
+            if( Connect.Enabled==true || Login.Enabled==true || blackButton.Enabled==true || strPath=="")
+            {
+                AllMessage.AppendText("請檢查所有設定再開始\r\n");
+                return;
+            }
             myProcess.StartInfo.FileName = strPath;
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
@@ -248,13 +266,104 @@ namespace Gomoku
             int J = getJ(words[1]);
             client.send("play " + account() + " " + output);
             map[I, J] = whichSide;
-            board.UpdateBoard();
+            board.UpdateBoard(I, J, whichSide);
+
+            if( checkWin(I, J, whichSide) )
+            {
+                // end case
+                if (whichSide == 1)
+                    MessageBox.Show("Black Side Win!!!");
+                else if (whichSide == 2)
+                    MessageBox.Show("White Side Win!!!");
+                whoWin = whichSide;
+            }
         }
 
         void ShowBoard_FormClosed(object sender, FormClosedEventArgs e)
         {
             ShowBoard sub = (ShowBoard)sender;
             this.Show();
+        }
+
+        bool checkWin(int I, int J, int currside)
+        {
+            int i, j, cnt, size = map.GetLength(0);
+
+            // i-1, i, i+1
+            i = I; j = J; cnt = 0;
+            i -= 1;
+            while( i>=0 )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                i -= 1;
+            }
+            i = I; j = J;
+            i += 1;
+            while( i<size )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                i += 1;
+            }
+            if (cnt >= 4) return true;
+
+            // j-1, j, j+1
+            i = I; j = J; cnt = 0;
+            j -= 1;
+            while( j>=0 )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                j -= 1;
+            }
+            i = I; j = J;
+            j += 1;
+            while( j<size )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                j += 1;
+            }
+            if (cnt >= 4) return true;
+
+            // --, 0, ++ 
+            i = I; j = J; cnt = 0;
+            i -= 1;  j -= 1;
+            while( i>=0 && j>=0 )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                i -= 1; j -= 1;
+            }
+            i = I; j = J;
+            i += 1; j += 1;
+            while( i<size && j<size )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+            }
+            if (cnt >= 4) return true;
+
+            // -+, 0, +-
+            i = I; j = J; cnt = 0;
+            i -= 1;  j += 1;
+            while( i>=0 && j<size )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+                i -= 1; j += 1;
+            }
+            i = I; j = J;
+            i += 1; j -= 1;
+            while( i<size && j>=0 )
+            {
+                if (map[i, j] == currside) cnt += 1;
+                else break;
+            }
+            if (cnt >= 4) return true;
+
+            return false;
         }
     }
 }

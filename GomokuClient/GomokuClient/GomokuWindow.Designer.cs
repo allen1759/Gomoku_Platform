@@ -227,7 +227,7 @@
             // 
             // openFileDlg
             // 
-            this.openFileDlg.FileName = "openFileDialog1";
+            this.openFileDlg.FileName = "MyAI.exe";
             // 
             // Form1
             // 

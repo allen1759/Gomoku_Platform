@@ -18,12 +18,9 @@ namespace Gomoku
         Graphics g;
         Image imageBlack, imageWhite, imageBoard;
 
-        //public Form1 fatherForm;
-        //public int whichSide;
         public int[,] map;
-        //public Process myProcess;
-        //public StreamWriter myStreamWriter;
-        //public StreamReader myStreamReader;
+        int boardX = 28, boardY = 28, boardLength = 480;
+        int distance = 32, startx = 15, starty = 15;
 
         public ShowBoard()
         {
@@ -35,39 +32,45 @@ namespace Gomoku
             imageBlack = Image.FromFile("../../black.png");
             imageWhite = Image.FromFile("../../white.png");
 
-            map = new int[15, 15];
-            for (int i = 0; i < 15; i += 1)
-                for (int j = 0; j < 15; j += 1)
-                    map[i, j] = 0;
-            UpdateBoard();
+            //map = new int[15, 15];
+            //for (int i = 0; i < 15; i += 1)
+            //    for (int j = 0; j < 15; j += 1)
+            //        map[i, j] = 0;
         }
 
         public void UpdateBoard()
         {
-            g.DrawImage(imageBoard, 28, 28, 480, 480);
-            int distance = 32, startx = 15, starty = 15;
+            g.DrawImage(imageBoard, boardX, boardY, boardLength, boardLength);
             for (int i = 0; i < map.GetLength(0); i += 1)
             {
                 for (int j = 0; j < map.GetLength(1); j += 1)
                 {
-                    g.DrawImage(imageBlack, starty + i * distance, startx + j * distance, 64, 64);
-                    g.DrawImage(imageWhite, starty + i * distance, startx + j * distance, 64, 64);
+                    if( map[i,j]==1 )
+                    {
+                        g.DrawImage(imageBlack, starty + i * distance, startx + j * distance, 64, 64);
+                    }
+                    else if( map[i,j]==2)
+                    {
+                        g.DrawImage(imageWhite, starty + i * distance, startx + j * distance, 64, 64);
+                    }
                 }
             }
-            //boardMsg.Text = "";
-            //for (int i = 0; i < map.GetLength(0); i += 1)
-            //{
-            //    for (int j = 0; j < map.GetLength(1); j += 1)
-            //    {
-            //        if (map[i, j] == 1)
-            //            boardMsg.Text += "B ";
-            //        else if (map[i, j] == 2)
-            //            boardMsg.Text += "W ";
-            //        else
-            //            boardMsg.Text += "  ";
-            //    }
-            //    boardMsg.Text += "\r\n";
-            //}
+        }
+
+        public void UpdateBoard(int i, int j, int whichSide)
+        {
+            if( whichSide==1)
+            {
+                g.DrawImage(imageBlack, starty + i * distance, startx + j * distance, 64, 64);
+            }
+            else if( whichSide==2 )
+            {
+                g.DrawImage(imageWhite, starty + i * distance, startx + j * distance, 64, 64);
+            }
+            else
+            {
+                MessageBox.Show("Unknown Side");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

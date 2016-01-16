@@ -51,8 +51,15 @@ namespace Gomoku
             IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(ip), NetSetting.port);
 
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(ipep);
-            return new NetSocket(socket);
+            try
+            {
+                socket.Connect(ipep);
+                return new NetSocket(socket);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public Thread newListener(StrHandler pHandler)
