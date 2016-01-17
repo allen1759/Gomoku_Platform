@@ -168,7 +168,7 @@ namespace Gomoku
                         myTurn();
                 }
             }
-            else if(words[0]=="play" && words[1]!=account())
+            else if(words[0]=="play" && words[1]!=account() && whoWin==0)
             {
                 int I = getI(words[2]);
                 int J = getJ(words[3]);
@@ -240,7 +240,7 @@ namespace Gomoku
             if (whichSide == 1) return 2;
             if (whichSide == 2) return 1;
             return 0;
-        }
+       } 
         private int getI(String word)
         {
             try
@@ -260,10 +260,21 @@ namespace Gomoku
 
         private void myTurn()
         {
-            String output = myStreamReader.ReadLine();
-            String[] words = output.Split(' ');
-            int I = getI(words[0]);
-            int J = getJ(words[1]);
+            String output;
+            String[] words;
+            int I, J;
+            while( true )
+            {
+                output = myStreamReader.ReadLine();
+                words = output.Split(' ');
+                I = getI(words[0]);
+                J = getJ(words[1]);
+                if (I == -1 || J == -1 || map[I,J]!=0)
+                {
+                    myStreamWriter.WriteLine("-1 I");
+                }
+                else break;
+            }
             client.send("play " + account() + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard(I, J, whichSide);
@@ -283,6 +294,7 @@ namespace Gomoku
         {
             ShowBoard sub = (ShowBoard)sender;
             this.Show();
+            myProcess.Close();
         }
 
         bool checkWin(int I, int J, int currside)
@@ -342,6 +354,7 @@ namespace Gomoku
             {
                 if (map[i, j] == currside) cnt += 1;
                 else break;
+                i += 1; j += 1;
             }
             if (cnt >= 4) return true;
 
@@ -360,6 +373,7 @@ namespace Gomoku
             {
                 if (map[i, j] == currside) cnt += 1;
                 else break;
+                i += 1; j -= 1;
             }
             if (cnt >= 4) return true;
 

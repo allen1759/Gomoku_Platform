@@ -45,14 +45,7 @@ namespace Gomoku
             {
                 for (int j = 0; j < map.GetLength(1); j += 1)
                 {
-                    if( map[i,j]==1 )
-                    {
-                        g.DrawImage(imageBlack, starty + i * distance, startx + j * distance, 64, 64);
-                    }
-                    else if( map[i,j]==2)
-                    {
-                        g.DrawImage(imageWhite, starty + i * distance, startx + j * distance, 64, 64);
-                    }
+                    UpdateBoard(i, j, map[i, j]);
                 }
             }
         }
@@ -61,11 +54,11 @@ namespace Gomoku
         {
             if( whichSide==1)
             {
-                g.DrawImage(imageBlack, starty + i * distance, startx + j * distance, 64, 64);
+                g.DrawImage(imageBlack, startx + j * distance, starty + i * distance, 64, 64);
             }
             else if( whichSide==2 )
             {
-                g.DrawImage(imageWhite, starty + i * distance, startx + j * distance, 64, 64);
+                g.DrawImage(imageWhite, startx + j * distance, starty + i * distance, 64, 64);
             }
             else
             {
@@ -78,16 +71,5 @@ namespace Gomoku
             UpdateBoard();
         }
 
-        private int getI(String output)
-        {
-            String[] words = output.Split(' ');
-            return 15 - Int32.Parse(words[0]);
-        }
-        private int getJ(String output)
-        {
-            String[] words = output.Split(' ');
-            return (words[1][0] - 'A');
-        }
-        
     }
 }
