@@ -253,6 +253,7 @@
             this.Controls.Add(this.textBoxMsg);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.AllMessage);
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "GomokuClient";
             this.ResumeLayout(false);

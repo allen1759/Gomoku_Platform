@@ -51,6 +51,20 @@ namespace Gomoku
             whiteButton.Enabled = false;
         }
 
+        ~Form1()
+        {
+            this.Close();
+            Application.Exit();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)//按下ESC
+            {
+                Application.Exit();//關閉程式
+            }
+        }
+
         private void Connect_Click(object sender, EventArgs e)
         {
             // 設定目標server IP
@@ -163,7 +177,12 @@ namespace Gomoku
                     board.FormClosed += new FormClosedEventHandler(ShowBoard_FormClosed);
                     board.UpdateBoard();
                     this.Hide();
-                    
+
+                    if (whichSide == 1)
+                        myStreamWriter.WriteLine("0 B");
+                    else if (whichSide == 2)
+                        myStreamWriter.WriteLine("0 W");
+
                     if( whichSide==1 )
                         myTurn();
                 }
@@ -174,6 +193,11 @@ namespace Gomoku
                 int J = getJ(words[3]);
                 map[I, J] = otherSide();
                 board.UpdateBoard(I, J, otherSide());
+                if (otherSide() == 1)
+                    board.AddMessage("Black: " + words[2] + " " + words[3]);
+                else if (otherSide() == 2)
+                    board.AddMessage("White: " + words[2] + " " + words[3]);
+
                 if( checkWin(I, J, otherSide()) )
                 {
                     // end case
@@ -220,6 +244,7 @@ namespace Gomoku
             myProcess.Start();
             myStreamWriter = myProcess.StandardInput;
             myStreamReader = myProcess.StandardOutput;
+
 
             client.send("cmd ready " + account() + " " + whichSide);
             textBoxMsg.Text = "";
@@ -278,6 +303,10 @@ namespace Gomoku
             client.send("play " + account() + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard(I, J, whichSide);
+            if (whichSide == 1)
+                board.AddMessage("Black: " + output);
+            else if (whichSide == 2)
+                board.AddMessage("White: " + output);
 
             if( checkWin(I, J, whichSide) )
             {
