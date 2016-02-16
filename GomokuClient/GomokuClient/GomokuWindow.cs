@@ -91,12 +91,12 @@ namespace Gomoku
             client = NetSocket.connect(NetSetting.serverIp);
             if (client == null)
             {
-                AllMessage.AppendText("Cannont connect to this Server\r\n");
+                AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
                 Connect.Enabled = true;
             }
             else
             {
-                AllMessage.AppendText("Connect to Server: " + IPaddr.Text + "\r\n");
+                AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
             }
         }
@@ -171,7 +171,7 @@ namespace Gomoku
             {
                 if(words[1]== "loginsucess")
                 {
-                    AllMessage.AppendText("Login Successfully!!\r\n");
+                    AllMessage.AppendText("Login Successfully!!" + Environment.NewLine);
                     isLogin = true;
                     Login.Enabled = false;
                     Account.Enabled = false;
@@ -182,7 +182,7 @@ namespace Gomoku
                 }
                 else if(words[1] == "loginfail")
                 {
-                    AllMessage.AppendText("Login Failed!!\r\n");
+                    AllMessage.AppendText("Login Failed!!" + Environment.NewLine);
                 }
                 else if(words[1] == "ready")
                 {
@@ -258,7 +258,7 @@ namespace Gomoku
         {
             if( Connect.Enabled==true || Login.Enabled==true || blackButton.Enabled==true || strPath=="")
             {
-                AllMessage.AppendText("請檢查所有設定再開始\r\n");
+                AllMessage.AppendText("請檢查所有設定再開始" + Environment.NewLine);
                 return;
             }
             myProcess.StartInfo.FileName = strPath;
