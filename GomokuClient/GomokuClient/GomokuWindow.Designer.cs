@@ -48,6 +48,7 @@
             this.selectFile = new System.Windows.Forms.Button();
             this.fileName = new System.Windows.Forms.TextBox();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
+            this.clearButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AllMessage
@@ -229,11 +230,22 @@
             // 
             this.openFileDlg.FileName = "MyAI.exe";
             // 
+            // clearButton
+            // 
+            this.clearButton.Location = new System.Drawing.Point(366, 153);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(79, 23);
+            this.clearButton.TabIndex = 20;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButtun_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 382);
+            this.Controls.Add(this.clearButton);
             this.Controls.Add(this.fileName);
             this.Controls.Add(this.selectFile);
             this.Controls.Add(this.label6);
@@ -283,6 +295,7 @@
         private System.Windows.Forms.Button selectFile;
         private System.Windows.Forms.TextBox fileName;
         private System.Windows.Forms.OpenFileDialog openFileDlg;
+        private System.Windows.Forms.Button clearButton;
     }
 }
 

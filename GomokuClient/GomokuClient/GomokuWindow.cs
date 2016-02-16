@@ -40,7 +40,7 @@ namespace Gomoku
             fileName.ReadOnly = true;
 
             whichSide = 0;
-            // 初始化map 空=0 黑=1 白=2
+            // 初始化map 空=0 黑=1 白=2 觀察者=3
             for(int i=0; i<map.GetLength(0); i += 1)
             {
                 for(int j=0; j<map.GetLength(1); j += 1)
@@ -254,6 +254,11 @@ namespace Gomoku
             whiteButton.Enabled = false;
         }
 
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            client.send("cmd clear " + account());
+        }
+
         private void Ready_Click(object sender, EventArgs e)
         {
             if( Connect.Enabled==true || Login.Enabled==true || blackButton.Enabled==true || strPath=="")
@@ -439,5 +444,7 @@ namespace Gomoku
 
             return false;
         }
+
+
     }
 }
