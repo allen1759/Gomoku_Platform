@@ -22,15 +22,20 @@ namespace Gomoku
         int boardX = 28, boardY = 28, boardLength = 480;
         int distance = 32, startx = 15, starty = 15;
 
+        public delegate void myTurnHandler(String str);
+        public myTurnHandler mth;
+
         public ShowBoard()
         {
             InitializeComponent();
-
+            
             g = this.CreateGraphics();
 
             imageBoard = Image.FromFile("board.jpg");
             imageBlack = Image.FromFile("black.png");
             imageWhite = Image.FromFile("white.png");
+
+            mth = new myTurnHandler(AddMessage);
 
             //map = new int[15, 15];
             //for (int i = 0; i < 15; i += 1)
@@ -40,7 +45,6 @@ namespace Gomoku
             //int[] ys = new int[] { 0, 1, 1, 1, 2, 3, 3, 4, 4, 5 };
             //for (int i = 0; i < 10; i += 1)
             //    map[xs[i], ys[i]] = 1;
-
             //xs = new int[] { 4, 7, 9, 8, 7, 6, 5, 10, 3 };
             //ys = new int[] { 1, 2, 3, 4, 4, 4, 4, 5, 5 };
             //for (int i = 0; i < 9; i += 1)
@@ -100,9 +104,25 @@ namespace Gomoku
             UpdateBoard();
         }
 
+        //public void AddMessageInvoke(TextBox tb, string text)
+        //{
+        //    if(tb.InvokeRequired)   
+        //    {
+        //        myTurnHandler myHand = new myTurnHandler(AddMessageInvoke);
+        //        tb.Invoke(myHand, tb, text);
+        //    }
+        //    else
+        //    {
+        //        tb.Text += text + Environment.NewLine;
+        //    }
+        //}
         public void AddMessage(String str)
         {
-            battle.AppendText(str + "\r\n");
+            battle.AppendText(str + Environment.NewLine);
+        }
+        public void SetCurrentStep(String str)
+        {
+            currentStep.AppendText(str);
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Gomoku
 {
@@ -184,7 +185,11 @@ namespace Gomoku
                         myStreamWriter.WriteLine("0 W");
 
                     if( whichSide==1 )
-                        myTurn();
+                    {
+                        Thread threadToGetNextStep = new Thread(new ThreadStart(myTurn));
+                        threadToGetNextStep.Name = "my turn thread";
+                        threadToGetNextStep.Start();
+                    }
                 }
             }
             else if(words[0]=="play" && words[1]!=account() && whoWin==0)
@@ -194,9 +199,11 @@ namespace Gomoku
                 map[I, J] = otherSide();
                 board.UpdateBoard(I, J, otherSide());
                 if (otherSide() == 1)
-                    board.AddMessage("Black: " + words[2] + " " + words[3]);
+                    board.Invoke(board.mth, "Black: " + words[2] + " " + words[3]);
+                    //board.AddMessage("Black: " + words[2] + " " + words[3]);
                 else if (otherSide() == 2)
-                    board.AddMessage("White: " + words[2] + " " + words[3]);
+                    board.Invoke(board.mth, "White: " + words[2] + " " + words[3]);
+                    //board.AddMessage("White: " + words[2] + " " + words[3]);
 
                 if( checkWin(I, J, otherSide()) )
                 {
@@ -210,7 +217,9 @@ namespace Gomoku
                 else
                 {
                     myStreamWriter.WriteLine(words[2] + " " + words[3]);
-                    myTurn();
+                    Thread threadToGetNextStep = new Thread(new ThreadStart(myTurn));
+                    threadToGetNextStep.Name = "my turn thread";
+                    threadToGetNextStep.Start();
                 }
             }
             return "OK";
@@ -265,7 +274,7 @@ namespace Gomoku
             if (whichSide == 1) return 2;
             if (whichSide == 2) return 1;
             return 0;
-       } 
+        } 
         private int getI(String word)
         {
             try
@@ -303,10 +312,13 @@ namespace Gomoku
             client.send("play " + account() + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard(I, J, whichSide);
+
             if (whichSide == 1)
-                board.AddMessage("Black: " + output);
+                board.Invoke(board.mth, "Black: " + output);
+            //board.AddMessage("Black: " + output);
             else if (whichSide == 2)
-                board.AddMessage("White: " + output);
+                board.Invoke(board.mth, "White: " + output);
+                //board.AddMessage("White: " + output);
 
             if( checkWin(I, J, whichSide) )
             {
@@ -319,10 +331,13 @@ namespace Gomoku
             }
         }
 
+        //void myTurnHelper()
+
         void ShowBoard_FormClosed(object sender, FormClosedEventArgs e)
         {
             ShowBoard sub = (ShowBoard)sender;
             this.Show();
+            myProcess.CloseMainWindow();
             myProcess.Close();
         }
 

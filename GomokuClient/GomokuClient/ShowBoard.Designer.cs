@@ -30,6 +30,7 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.battle = new System.Windows.Forms.TextBox();
+            this.currentStep = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -52,11 +53,19 @@
             this.battle.Size = new System.Drawing.Size(167, 391);
             this.battle.TabIndex = 2;
             // 
+            // currentStep
+            // 
+            this.currentStep.Location = new System.Drawing.Point(555, 35);
+            this.currentStep.Name = "currentStep";
+            this.currentStep.Size = new System.Drawing.Size(100, 22);
+            this.currentStep.TabIndex = 3;
+            // 
             // ShowBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 533);
+            this.Controls.Add(this.currentStep);
             this.Controls.Add(this.battle);
             this.Controls.Add(this.button1);
             this.Name = "ShowBoard";
@@ -68,6 +77,7 @@
 
         #endregion
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox battle;
+        private System.Windows.Forms.TextBox currentStep;
+        public System.Windows.Forms.TextBox battle;
     }
 }
