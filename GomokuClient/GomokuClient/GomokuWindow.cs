@@ -68,23 +68,39 @@ namespace Gomoku
 
         private void Connect_Click(object sender, EventArgs e)
         {
+            Connect.Enabled = false;
             // 設定目標server IP
             if(IPaddr.Text.Length > 0)
             {
                 NetSetting.serverIp = IPaddr.Text;
             }
+            
+            Thread threadToConnect = new Thread(new ThreadStart(ConnectHelper));
+            threadToConnect.Name = "thread to server connecting";
+            threadToConnect.Start();
+
+            if( !threadToConnect.Join(3000) )
+            {
+                threadToConnect.Abort();
+                AllMessage.AppendText("Timeout!!! Cannont connect to this Server!" + Environment.NewLine);
+                Connect.Enabled = true;
+            }
+        }
+        private void ConnectHelper()
+        {
             client = NetSocket.connect(NetSetting.serverIp);
             if (client == null)
             {
                 AllMessage.AppendText("Cannont connect to this Server\r\n");
+                Connect.Enabled = true;
             }
             else
             {
                 AllMessage.AppendText("Connect to Server: " + IPaddr.Text + "\r\n");
-                Connect.Enabled = false;
                 Login.Enabled = true;
             }
         }
+
         private void Login_Click(object sender, EventArgs e)
         {
             // 防止空字串
