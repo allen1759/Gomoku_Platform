@@ -23,8 +23,8 @@ namespace Gomoku
 
         ShowBoard board;
         // 1 = black, 2 = white
-        int whichSide = 0;
-        int whoWin = 0;
+        int whichSide = CommandWords.NOONE;
+        int whoWin = CommandWords.NOONE;
         int[,] map = new int[15, 15];
         Process myProcess = new Process();
         StreamWriter myStreamWriter;
@@ -44,9 +44,8 @@ namespace Gomoku
             Login.Enabled = false;
             fileName.ReadOnly = true;
 
-            allmh = new allMessageHandler(AddAllMessage);
+            //allmh = new allMessageHandler(AddAllMessage);
 
-            whichSide = 0;
             // 初始化map 空=0 黑=1 白=2 觀察者=3
             for(int i=0; i<map.GetLength(0); i += 1)
             {
@@ -58,7 +57,6 @@ namespace Gomoku
             blackButton.Enabled = false;
             whiteButton.Enabled = false;
         }
-
         ~Form1()
         {
             this.Close();
@@ -85,14 +83,14 @@ namespace Gomoku
             client = NetSocket.connect(NetSetting.serverIp);
             if (client == null)
             {
-                this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
-                //AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
+                //this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
+                AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
                 Connect.Enabled = true;
             }
             else
             {
-                this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
-                //AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                //this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
             }
 
@@ -107,23 +105,20 @@ namespace Gomoku
             //    Connect.Enabled = true;
             //}
         }
-        public void AddAllMessage(String str)
-        {
-            AllMessage.AppendText(str);
-        }
+        //public void AddAllMessage(String str)
+        //{
+        //    AllMessage.AppendText(str);
+        //}
         private void ConnectHelper()
         {
-            // client = NetSocket.Invoke(NetSocket.conh, NetSetting.serverIp);
             client = NetSocket.connect(NetSetting.serverIp);
             if (client == null)
             {
-                //this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
                 //AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
                 Connect.Enabled = true;
             }
             else
             {
-                //this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 //AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
             }
@@ -140,7 +135,11 @@ namespace Gomoku
             client.newListener(processMsgComeIn);
             if (!isLogin)
             {
-                client.send("cmd login " + client.remoteEndPoint + account() + " " + pass());
+                // command sending
+                client.send(CommandWords.command + " " + 
+                            client.remoteEndPoint + " " +
+                            CommandWords.command_login + " " +
+                            account() + " " + pass() );
             }
         }
 
@@ -156,19 +155,64 @@ namespace Gomoku
                 sendMsg();
         }
 
-        public String account()
+        private void blackButton_Click(object sender, EventArgs e)
         {
-            return Account.Text.Trim();
+            whichSide = CommandWords.BLACK;
+            blackButton.Enabled = false;
+            whiteButton.Enabled = false;
         }
-        public String pass()
+        private void whiteButton_Click(object sender, EventArgs e)
         {
-            return Password.Text.Trim();
+            whichSide = CommandWords.WHITE;
+            blackButton.Enabled = false;
+            whiteButton.Enabled = false;
         }
 
-        public String msg()
+        private void clearButton_Click(object sender, EventArgs e)
         {
-            return textBoxMsg.Text;
+            client.send(CommandWords.command + " " +
+                        client.remoteEndPoint + " " +
+                        CommandWords.command_clear + " " +
+                        account());
         }
+
+        private void Ready_Click(object sender, EventArgs e)
+        {
+            if (Connect.Enabled == true || Login.Enabled == true || blackButton.Enabled == true || strPath == "")
+            {
+                AllMessage.AppendText("請檢查所有設定再開始" + Environment.NewLine);
+                return;
+            }
+            myProcess.StartInfo.FileName = strPath;
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
+
+            myProcess.Start();
+            myStreamWriter = myProcess.StandardInput;
+            myStreamReader = myProcess.StandardOutput;
+
+            client.send(CommandWords.command + " " +
+                        client.remoteEndPoint + " " +
+                        CommandWords.command_ready + " " +
+                        account() + " " + whichSide);
+            //client.send("cmd ready " + account() + " " + whichSide);
+            textBoxMsg.Text = "";
+        }
+
+        private void selectFile_Click(object sender, EventArgs e)
+        {
+            if (this.openFileDlg.ShowDialog() == DialogResult.OK)
+            {
+                strPath = openFileDlg.FileName;
+                // fileName.Text = strPath;
+                fileName.Text = Path.GetFileName(strPath);
+            }
+        }
+
+
+
+
 
         public void sendMsg()
         {
@@ -178,13 +222,13 @@ namespace Gomoku
                 textBoxMsg.Text = "";
             }
         }
-        public void sendMsg(String msgstr)
-        {
-            if (msgstr.Length > 0)
-            {
-                client.send(account() + " : " + msgstr);
-            }
-        }
+        //public void sendMsg(String msgstr)
+        //{
+        //    if (msgstr.Length > 0)
+        //    {
+        //        client.send(account() + " : " + msgstr);
+        //    }
+        //}
 
         public String processMsgComeIn(String msg)
         {
@@ -192,12 +236,14 @@ namespace Gomoku
             return "OK";
         }
 
+        // analyze come in messages
         public String addMsg(String msg)
         {
             String[] words = msg.Split(' ');
-            if( words[0] == "cmd" )
+            // message start with word: command
+            if( words[0] == CommandWords.command )
             {
-                if(words[1]== "loginsucess")
+                if( words[1]== CommandWords.command_loginSuce )
                 {
                     AllMessage.AppendText("Login Successfully!!" + Environment.NewLine);
                     isLogin = true;
@@ -208,11 +254,11 @@ namespace Gomoku
                     blackButton.Enabled = true;
                     whiteButton.Enabled = true;
                 }
-                else if(words[1] == "loginfail")
+                else if(words[1] == CommandWords.command_loginFail )
                 {
                     AllMessage.AppendText("Login Failed!!" + Environment.NewLine);
                 }
-                else if(words[1] == "ready")
+                else if(words[1] == CommandWords.command_ready )
                 {
                     board = new ShowBoard();
                     board.map = map;
@@ -223,12 +269,12 @@ namespace Gomoku
                     board.UpdateBoard();
                     this.Hide();
 
-                    if (whichSide == 1)
-                        myStreamWriter.WriteLine("0 B");
-                    else if (whichSide == 2)
-                        myStreamWriter.WriteLine("0 W");
+                    if (whichSide == CommandWords.BLACK)
+                        myStreamWriter.WriteLine(CommandWords.play_startInfoBlack);
+                    else if (whichSide == CommandWords.WHITE)
+                        myStreamWriter.WriteLine(CommandWords.play_startInfoWhite);
 
-                    if( whichSide==1 )
+                    if( whichSide == CommandWords.WHITE )
                     {
                         Thread threadToGetNextStep = new Thread(new ThreadStart(myTurn));
                         threadToGetNextStep.Name = "my turn thread";
@@ -236,7 +282,8 @@ namespace Gomoku
                     }
                 }
             }
-            else if(words[0]=="play" && words[1]!=account() && whoWin==0)
+            // message start with word: play 
+            else if(words[0]==CommandWords.playing && words[1]!=account() && whoWin==0)
             {
                 int I = getI(words[2]);
                 int J = getJ(words[3]);
@@ -269,77 +316,10 @@ namespace Gomoku
             return "OK";
         }
 
-        private void blackButton_Click(object sender, EventArgs e)
-        {
-            whichSide = 1;
-            blackButton.Enabled = false;
-            whiteButton.Enabled = false;
-        }
-        private void whiteButton_Click(object sender, EventArgs e)
-        {
-            whichSide = 2;
-            blackButton.Enabled = false;
-            whiteButton.Enabled = false;
-        }
+        
 
-        private void clearButton_Click(object sender, EventArgs e)
-        {
-            client.send("cmd clear " + account());
-        }
-
-        private void Ready_Click(object sender, EventArgs e)
-        {
-            if( Connect.Enabled==true || Login.Enabled==true || blackButton.Enabled==true || strPath=="")
-            {
-                AllMessage.AppendText("請檢查所有設定再開始" + Environment.NewLine);
-                return;
-            }
-            myProcess.StartInfo.FileName = strPath;
-            myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.RedirectStandardInput = true;
-            myProcess.StartInfo.RedirectStandardOutput = true;
-
-            myProcess.Start();
-            myStreamWriter = myProcess.StandardInput;
-            myStreamReader = myProcess.StandardOutput;
-
-
-            client.send("cmd ready " + account() + " " + whichSide);
-            textBoxMsg.Text = "";
-        }
-
-        private void selectFile_Click(object sender, EventArgs e)
-        {
-            if (this.openFileDlg.ShowDialog() == DialogResult.OK)
-            {
-                strPath = openFileDlg.FileName;
-                // fileName.Text = strPath;
-                fileName.Text = Path.GetFileName(strPath);
-            }
-        }
-
-        private int otherSide()
-        {
-            if (whichSide == 1) return 2;
-            if (whichSide == 2) return 1;
-            return 0;
-        } 
-        private int getI(String word)
-        {
-            try
-            {
-                return 15 - Int32.Parse(word);
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-        private int getJ(String word)
-        {
-            if (word[0] > 'O' || word[0] < 'A') return -1;
-            return (word[0] - 'A');
-        }
+        
+        
 
         private void myTurn()
         {
@@ -358,16 +338,20 @@ namespace Gomoku
                 }
                 else break;
             }
-            client.send("play " + account() + " " + output);
+            client.send(CommandWords.playing + " " + account() + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard(I, J, whichSide);
 
             if (whichSide == 1)
+            {
                 board.Invoke(board.mth, "Black: " + output);
-            //board.AddMessage("Black: " + output);
+                //board.AddMessage("Black: " + output);
+            }
             else if (whichSide == 2)
+            {
                 board.Invoke(board.mth, "White: " + output);
                 //board.AddMessage("White: " + output);
+            }
 
             if( checkWin(I, J, whichSide) )
             {
@@ -472,5 +456,45 @@ namespace Gomoku
             return false;
         }
 
+        // some helper function
+        private String account()
+        {
+            return Account.Text.Trim();
+        }
+        private String pass()
+        {
+            return Password.Text.Trim();
+        }
+
+        private String msg()
+        {
+            return textBoxMsg.Text;
+        }
+        private int otherSide()
+        {
+            if (whichSide == CommandWords.BLACK) return CommandWords.WHITE;
+            if (whichSide == CommandWords.WHITE) return CommandWords.BLACK;
+            MessageBox.Show("Cannot verify the side.");
+            return 0;
+        }
+        // translate words to int position
+        //asld fjsadlk jfasldk jfkasd jlkfasldf jaksld jfalksd fjlaskdjfaksdfjasldkfjaskldfjlaskdjfklasdjflasdjfklasdjkflasjdfljasdklfj
+        private int getI(String word)
+        {
+            try
+            {
+                return 15 - Int32.Parse(word);
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        private int getJ(String word)
+        {
+            if (word[0] > 'O' || word[0] < 'A') return -1;
+            return (word[0] - 'A');
+        }
+        //asld fjsadlk jfasldk jfkasd jlkfasldf jaksld jfalksd fjlaskdjfaksdfjasldkfjaskldfjlaskdjfklasdjflasdjfklasdjkflasjdfljasdklfj
     }
 }

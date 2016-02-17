@@ -6,6 +6,25 @@ using System.Threading;
 
 namespace Gomoku
 {
+    public class CommandWords
+    {
+        public const int NOONE = 0;
+        public const int BLACK = 1;
+        public const int WHITE = 2;
+        public const String STRBLACK = "black";
+        public const String STRWHITE = "white";
+
+        public const String command = "cmd";
+        public const String command_clear = "clear";
+        public const String command_ready = "ready";
+        public const String command_login = "login";
+        public const String command_loginSuce = "loginsucess";
+        public const String command_loginFail = "loginfail";
+
+        public const String playing = "play";
+        public const String play_startInfoBlack = "0 B";
+        public const String play_startInfoWhite = "0 W";
+    }
     public class NetSetting
     {
         public static String serverIp = "127.0.0.1";

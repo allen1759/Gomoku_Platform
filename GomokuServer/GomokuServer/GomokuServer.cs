@@ -14,7 +14,8 @@ namespace Gomoku
     {
         List<NetSocket> clientList = new List<NetSocket>();
         String playerName1, playerName2;
-        int whichSide1 = 0, whichSide2 = 0;
+        int whichSide1 = CommandWords.NOONE;
+        int whichSide2 = CommandWords.NOONE;
 
         public static void Main(String[] args)
         {
@@ -52,8 +53,10 @@ namespace Gomoku
                     clientList.Add(client);
                     client.newListener(processMsgComeIn);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(ex.Message);
                 }
                 //                clientList.Remove(client);
             }
@@ -67,60 +70,64 @@ namespace Gomoku
             Console.ForegroundColor = ConsoleColor.Gray;
 
             String[] words = msg.Split(' ');
-            if (words[0] == "cmd")
+            if (words[0] == CommandWords.command) 
             {
+                String currIP = words[1];
                 // 檢查帳號密碼
-                if (words[1] == "login" && words.Length >= 4 && words[2] == words[3])
+                if (words[2] == CommandWords.command_login && words[3] == words[4])
                 {
                     // 沒有檢查重複帳號登入
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(words[2] + " Login 成功");
+                    Console.WriteLine(words[3] + " Login 成功");
                     foreach (NetSocket client in clientList)
                     {
                         if (client.name=="")
                         {
-                            client.name = words[2];
+                            client.name = words[3];
                             Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
-                            client.send("cmd loginsucess");
+                            client.send(CommandWords.command + " " + CommandWords.command_loginSuce);
                             break;
                         }
                     }
                     //broadCast("cmd " + words[1]);
                 }
-                else if(words[1] == "login")
+                else if(words[2] == CommandWords.command_login)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(words[2] + " Login 失敗");
+                    Console.WriteLine(words[3] + " Login 失敗");
                     foreach (NetSocket client in clientList)
                     {
                         if(client.name=="")
                         {
                             // Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
-                            client.send("cmd loginfail");
+                            client.send(CommandWords.command + " " + CommandWords.command_loginFail);
                             break;
                         }
                     }
                 }
-                else if(words[1] == "ready")
+                else if(words[2] == CommandWords.command_clear)
                 {
-                    if (playerName1 == words[2] || playerName2 == words[2])
+                }
+                else if(words[2] == CommandWords.command_ready)
+                {
+                    if (playerName1 == words[3] || playerName2 == words[3])
                         return "OK";
                     if( whichSide1==0 )
                     {
-                        playerName1 = words[2];
-                        whichSide1 = Int32.Parse(words[3]);
+                        playerName1 = words[3];
+                        whichSide1 = Int32.Parse(words[4]);
                     }
-                    else if( whichSide2==0)
+                    else if( whichSide2==0 )
                     {
-                        playerName2 = words[2];
-                        whichSide2 = Int32.Parse(words[3]);
+                        playerName2 = words[3];
+                        whichSide2 = Int32.Parse(words[4]);
                     }
 
                     if( whichSide1!=0 && whichSide2!=0)
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("雙方成功設置");
-                        broadCast("cmd ready");
+                        broadCast(CommandWords.command + " " + CommandWords.command_ready);
                     }
                 }
                 else
@@ -129,7 +136,7 @@ namespace Gomoku
                     Console.WriteLine("==========ERROR!!! UNKNOWN CASE!!!==========");
                 }
             }
-            else if(words[0]=="play")
+            else if(words[0]==CommandWords.playing)
             {
                 broadCast(msg);
             }
