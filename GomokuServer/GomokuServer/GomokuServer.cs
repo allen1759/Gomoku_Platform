@@ -90,7 +90,7 @@ namespace Gomoku
                 else if(words[1] == "login")
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(words[1] + " Login 失敗");
+                    Console.WriteLine(words[2] + " Login 失敗");
                     foreach (NetSocket client in clientList)
                     {
                         if(client.name=="")

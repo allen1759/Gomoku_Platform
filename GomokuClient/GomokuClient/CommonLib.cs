@@ -56,8 +56,9 @@ namespace Gomoku
                 socket.Connect(ipep);
                 return new NetSocket(socket);
             }
-            catch
+            catch(Exception ex)
             {
+                //Console.WriteLine(ex.Message);
                 return null;
             }
         }

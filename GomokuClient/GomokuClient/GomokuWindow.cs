@@ -30,14 +30,21 @@ namespace Gomoku
         StreamWriter myStreamWriter;
         StreamReader myStreamReader;
 
+        public delegate void allMessageHandler(String str);
+        public allMessageHandler allmh;
+
         public Form1()
         {
+            //Form.CheckForIllegalCrossThreadCalls = false;
+
             InitializeComponent();
 
             msgHandler = this.addMsg;
             isLogin = false;
             Login.Enabled = false;
             fileName.ReadOnly = true;
+
+            allmh = new allMessageHandler(AddAllMessage);
 
             whichSide = 0;
             // 初始化map 空=0 黑=1 白=2 觀察者=3
@@ -74,29 +81,50 @@ namespace Gomoku
             {
                 NetSetting.serverIp = IPaddr.Text;
             }
-            
-            Thread threadToConnect = new Thread(new ThreadStart(ConnectHelper));
-            threadToConnect.Name = "thread to server connecting";
-            threadToConnect.Start();
 
-            if( !threadToConnect.Join(3000) )
-            {
-                threadToConnect.Abort();
-                AllMessage.AppendText("Timeout!!! Cannont connect to this Server!" + Environment.NewLine);
-                Connect.Enabled = true;
-            }
-        }
-        private void ConnectHelper()
-        {
             client = NetSocket.connect(NetSetting.serverIp);
             if (client == null)
             {
-                AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
+                this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
+                //AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
                 Connect.Enabled = true;
             }
             else
             {
-                AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                //AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                Login.Enabled = true;
+            }
+
+            //Thread threadToConnect = new Thread(new ThreadStart(ConnectHelper));
+            //threadToConnect.Name = "thread to server connecting";
+            //threadToConnect.Start();
+
+            //if (!threadToConnect.Join(3000))
+            //{
+            //    threadToConnect.Abort();
+            //    AllMessage.AppendText("Timeout!!! Cannont connect to this Server!" + Environment.NewLine);
+            //    Connect.Enabled = true;
+            //}
+        }
+        public void AddAllMessage(String str)
+        {
+            AllMessage.AppendText(str);
+        }
+        private void ConnectHelper()
+        {
+            // client = NetSocket.Invoke(NetSocket.conh, NetSetting.serverIp);
+            client = NetSocket.connect(NetSetting.serverIp);
+            if (client == null)
+            {
+                //this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
+                //AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
+                Connect.Enabled = true;
+            }
+            else
+            {
+                //this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
+                //AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
             }
         }
@@ -112,7 +140,7 @@ namespace Gomoku
             client.newListener(processMsgComeIn);
             if (!isLogin)
             {
-                client.send("cmd login " + account() + " " + pass());
+                client.send("cmd login " + client.remoteEndPoint + account() + " " + pass());
             }
         }
 
@@ -352,7 +380,6 @@ namespace Gomoku
             }
         }
 
-        //void myTurnHelper()
 
         void ShowBoard_FormClosed(object sender, FormClosedEventArgs e)
         {
