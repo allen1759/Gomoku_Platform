@@ -445,6 +445,5 @@ namespace Gomoku
             return false;
         }
 
-
     }
 }
