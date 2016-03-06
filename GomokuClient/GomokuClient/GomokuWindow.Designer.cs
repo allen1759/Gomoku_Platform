@@ -32,13 +32,11 @@
             this.buttonSend = new System.Windows.Forms.Button();
             this.textBoxMsg = new System.Windows.Forms.TextBox();
             this.Account = new System.Windows.Forms.TextBox();
-            this.Password = new System.Windows.Forms.TextBox();
             this.Login = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.IPaddr = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.Connect = new System.Windows.Forms.Button();
             this.blackButton = new System.Windows.Forms.Button();
             this.whiteButton = new System.Windows.Forms.Button();
@@ -83,15 +81,6 @@
             this.Account.Name = "Account";
             this.Account.Size = new System.Drawing.Size(159, 22);
             this.Account.TabIndex = 4;
-            // 
-            // Password
-            // 
-            this.Password.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.Password.Location = new System.Drawing.Point(12, 123);
-            this.Password.Name = "Password";
-            this.Password.PasswordChar = '*';
-            this.Password.Size = new System.Drawing.Size(159, 22);
-            this.Password.TabIndex = 5;
             // 
             // Login
             // 
@@ -140,16 +129,6 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Account";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Consolas", 14F);
-            this.label4.Location = new System.Drawing.Point(8, 98);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 22);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Password";
-            // 
             // Connect
             // 
             this.Connect.Location = new System.Drawing.Point(370, 31);
@@ -184,7 +163,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Consolas", 14F);
-            this.label5.Location = new System.Drawing.Point(112, 154);
+            this.label5.Location = new System.Drawing.Point(112, 123);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(50, 22);
             this.label5.TabIndex = 15;
@@ -269,13 +248,11 @@
             this.Controls.Add(this.whiteButton);
             this.Controls.Add(this.blackButton);
             this.Controls.Add(this.Connect);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.IPaddr);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Login);
-            this.Controls.Add(this.Password);
             this.Controls.Add(this.Account);
             this.Controls.Add(this.textBoxMsg);
             this.Controls.Add(this.buttonSend);
@@ -294,13 +271,11 @@
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.TextBox textBoxMsg;
         private System.Windows.Forms.TextBox Account;
-        private System.Windows.Forms.TextBox Password;
         private System.Windows.Forms.Button Login;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox IPaddr;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Connect;
         private System.Windows.Forms.Button blackButton;
         private System.Windows.Forms.Button whiteButton;

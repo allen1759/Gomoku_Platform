@@ -121,7 +121,6 @@ namespace Gomoku
                             client.remoteEndPoint + " " +
                             CommandWords.command_login + " " +
                             account());
-                            // account() + " " + pass() );
             }
         }
 
@@ -231,7 +230,6 @@ namespace Gomoku
                     isLogin = true;
                     Login.Enabled = false;
                     Account.Enabled = false;
-                    //Password.Enabled = false;
 
                     blackButton.Enabled = true;
                     whiteButton.Enabled = true;
@@ -440,10 +438,6 @@ namespace Gomoku
         {
             return Account.Text.Trim();
         }
-        //private String pass()
-        //{
-        //    return Password.Text.Trim();
-        //}
 
         private String msg()
         {
