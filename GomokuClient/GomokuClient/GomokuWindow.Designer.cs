@@ -49,6 +49,7 @@
             this.fileName = new System.Windows.Forms.TextBox();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
             this.clearButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // AllMessage
@@ -240,11 +241,24 @@
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Spectator",
+            "Black",
+            "White"});
+            this.comboBox1.Location = new System.Drawing.Point(384, 116);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 20);
+            this.comboBox1.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 382);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.fileName);
             this.Controls.Add(this.selectFile);
@@ -296,6 +310,7 @@
         private System.Windows.Forms.TextBox fileName;
         private System.Windows.Forms.OpenFileDialog openFileDlg;
         private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
