@@ -49,7 +49,7 @@
             this.fileName = new System.Windows.Forms.TextBox();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
             this.clearButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.identityBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // AllMessage
@@ -87,7 +87,7 @@
             // Password
             // 
             this.Password.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.Password.Location = new System.Drawing.Point(187, 112);
+            this.Password.Location = new System.Drawing.Point(12, 123);
             this.Password.Name = "Password";
             this.Password.PasswordChar = '*';
             this.Password.Size = new System.Drawing.Size(159, 22);
@@ -144,7 +144,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Consolas", 14F);
-            this.label4.Location = new System.Drawing.Point(72, 112);
+            this.label4.Location = new System.Drawing.Point(8, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(90, 22);
             this.label4.TabIndex = 11;
@@ -233,7 +233,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(366, 153);
+            this.clearButton.Location = new System.Drawing.Point(370, 153);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(79, 23);
             this.clearButton.TabIndex = 20;
@@ -241,24 +241,25 @@
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
-            // comboBox1
+            // identityBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Spectator",
-            "Black",
-            "White"});
-            this.comboBox1.Location = new System.Drawing.Point(384, 116);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 20);
-            this.comboBox1.TabIndex = 21;
+            this.identityBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.identityBox.FormattingEnabled = true;
+            this.identityBox.Items.AddRange(new object[] {
+            "Black (黑方)",
+            "White (白方)",
+            "Spectator (觀察者)"});
+            this.identityBox.Location = new System.Drawing.Point(187, 123);
+            this.identityBox.Name = "identityBox";
+            this.identityBox.Size = new System.Drawing.Size(121, 20);
+            this.identityBox.TabIndex = 21;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 382);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.identityBox);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.fileName);
             this.Controls.Add(this.selectFile);
@@ -310,7 +311,7 @@
         private System.Windows.Forms.TextBox fileName;
         private System.Windows.Forms.OpenFileDialog openFileDlg;
         private System.Windows.Forms.Button clearButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox identityBox;
     }
 }
 
