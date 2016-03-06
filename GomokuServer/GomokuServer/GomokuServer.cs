@@ -73,8 +73,8 @@ namespace Gomoku
             if (words[0] == CommandWords.command) 
             {
                 String currIP = words[1];
-                // 檢查帳號密碼
-                if (words[2] == CommandWords.command_login && words[3] == words[4])
+                // 不檢查帳號密碼
+                if (words[2] == CommandWords.command_login) 
                 {
                     // 沒有檢查重複帳號登入
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -91,6 +91,7 @@ namespace Gomoku
                     }
                     //broadCast("cmd " + words[1]);
                 }
+                // 沒有失敗的case
                 else if(words[2] == CommandWords.command_login)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;

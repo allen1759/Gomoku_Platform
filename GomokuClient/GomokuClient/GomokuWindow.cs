@@ -22,7 +22,6 @@ namespace Gomoku
         string strPath;
 
         ShowBoard board;
-        // 1 = black, 2 = white
         int whichSide = CommandWords.NOONE;
         int whoWin = CommandWords.NOONE;
         int[,] map = new int[15, 15];
@@ -56,6 +55,11 @@ namespace Gomoku
             }
             blackButton.Enabled = false;
             whiteButton.Enabled = false;
+
+            //AllMessage.AppendText("My local IpAddress is :" +
+            //                      System.Net.IPAddress.Parse(((System.Net.IPEndPoint)s.LocalEndPoint).Address.ToString()) + 
+            //                      "I am connected on port number " + 
+            //                      ((System.Net.IPEndPoint)s.LocalEndPoint).Port.ToString());
         }
         ~Form1()
         {
@@ -81,48 +85,25 @@ namespace Gomoku
             }
 
             client = NetSocket.connect(NetSetting.serverIp);
+            AllMessage.AppendText(client.socket.LocalEndPoint.ToString());
             if (client == null)
             {
-                //this.Invoke(allmh, "Cannot connect to this Server" + Environment.NewLine);
                 AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
                 Connect.Enabled = true;
             }
             else
             {
-                //this.Invoke(allmh, "Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
             }
 
-            //Thread threadToConnect = new Thread(new ThreadStart(ConnectHelper));
-            //threadToConnect.Name = "thread to server connecting";
-            //threadToConnect.Start();
-
-            //if (!threadToConnect.Join(3000))
-            //{
-            //    threadToConnect.Abort();
-            //    AllMessage.AppendText("Timeout!!! Cannont connect to this Server!" + Environment.NewLine);
-            //    Connect.Enabled = true;
-            //}
+            
         }
         //public void AddAllMessage(String str)
         //{
         //    AllMessage.AppendText(str);
         //}
-        private void ConnectHelper()
-        {
-            client = NetSocket.connect(NetSetting.serverIp);
-            if (client == null)
-            {
-                //AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
-                Connect.Enabled = true;
-            }
-            else
-            {
-                //AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
-                Login.Enabled = true;
-            }
-        }
+        
 
         private void Login_Click(object sender, EventArgs e)
         {
@@ -136,10 +117,11 @@ namespace Gomoku
             if (!isLogin)
             {
                 // command sending
-                client.send(CommandWords.command + " " + 
+                client.send(CommandWords.command + " " +
                             client.remoteEndPoint + " " +
                             CommandWords.command_login + " " +
-                            account() + " " + pass() );
+                            account());
+                            // account() + " " + pass() );
             }
         }
 
@@ -249,7 +231,7 @@ namespace Gomoku
                     isLogin = true;
                     Login.Enabled = false;
                     Account.Enabled = false;
-                    Password.Enabled = false;
+                    //Password.Enabled = false;
 
                     blackButton.Enabled = true;
                     whiteButton.Enabled = true;
@@ -316,9 +298,6 @@ namespace Gomoku
             return "OK";
         }
 
-        
-
-        
         
 
         private void myTurn()
@@ -461,10 +440,10 @@ namespace Gomoku
         {
             return Account.Text.Trim();
         }
-        private String pass()
-        {
-            return Password.Text.Trim();
-        }
+        //private String pass()
+        //{
+        //    return Password.Text.Trim();
+        //}
 
         private String msg()
         {
