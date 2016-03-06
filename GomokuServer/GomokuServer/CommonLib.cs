@@ -14,6 +14,7 @@ namespace Gomoku
         public const String STRBLACK = "black";
         public const String STRWHITE = "white";
 
+        // first category
         public const String command = "cmd";
         public const String command_clear = "clear";
         public const String command_ready = "ready";
@@ -21,6 +22,7 @@ namespace Gomoku
         public const String command_loginSuce = "loginsucess";
         public const String command_loginFail = "loginfail";
 
+        // second category
         public const String playing = "play";
         public const String play_startInfoBlack = "0 B";
         public const String play_startInfoWhite = "0 W";
