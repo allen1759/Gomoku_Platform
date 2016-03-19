@@ -18,6 +18,7 @@ namespace Gomoku
     {
         NetSocket client;
         StrHandler msgHandler;
+        String localep;
         bool isLogin;
         string strPath;
 
@@ -55,11 +56,6 @@ namespace Gomoku
             }
             blackButton.Enabled = false;
             whiteButton.Enabled = false;
-
-            //AllMessage.AppendText("My local IpAddress is :" +
-            //                      System.Net.IPAddress.Parse(((System.Net.IPEndPoint)s.LocalEndPoint).Address.ToString()) + 
-            //                      "I am connected on port number " + 
-            //                      ((System.Net.IPEndPoint)s.LocalEndPoint).Port.ToString());
         }
         ~Form1()
         {
@@ -85,7 +81,6 @@ namespace Gomoku
             }
 
             client = NetSocket.connect(NetSetting.serverIp);
-            AllMessage.AppendText(client.socket.LocalEndPoint.ToString());
             if (client == null)
             {
                 AllMessage.AppendText("Cannont connect to this Server" + Environment.NewLine);
@@ -95,9 +90,8 @@ namespace Gomoku
             {
                 AllMessage.AppendText("Connect to Server: " + IPaddr.Text + Environment.NewLine);
                 Login.Enabled = true;
+                localep = client.socket.LocalEndPoint.ToString();
             }
-
-            
         }
         //public void AddAllMessage(String str)
         //{
@@ -117,8 +111,8 @@ namespace Gomoku
             if (!isLogin)
             {
                 // command sending
-                client.send(CommandWords.command + " " +
-                            client.remoteEndPoint + " " +
+                client.send(localep + " " +
+                            CommandWords.command + " " +
                             CommandWords.command_login + " " +
                             account());
             }
@@ -136,6 +130,23 @@ namespace Gomoku
                 sendMsg();
         }
 
+
+        private void identityBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            String selected = identityBox.SelectedItem.ToString();
+            if (selected[0] == 'B')
+            {
+                whichSide = CommandWords.BLACK;
+            }
+            else if (selected[0] == 'W')
+            {
+                whichSide = CommandWords.WHITE;
+            }
+            else
+            {
+                whichSide = CommandWords.NOONE;
+            }
+        }
         private void blackButton_Click(object sender, EventArgs e)
         {
             whichSide = CommandWords.BLACK;
@@ -151,15 +162,15 @@ namespace Gomoku
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            client.send(CommandWords.command + " " +
-                        client.remoteEndPoint + " " +
+            client.send(localep + " " + 
+                        CommandWords.command + " " +
                         CommandWords.command_clear + " " +
                         account());
         }
 
         private void Ready_Click(object sender, EventArgs e)
         {
-            if (Connect.Enabled == true || Login.Enabled == true || blackButton.Enabled == true || strPath == "")
+            if (Connect.Enabled == true || Login.Enabled == true || strPath == "")
             {
                 AllMessage.AppendText("請檢查所有設定再開始" + Environment.NewLine);
                 return;
@@ -173,11 +184,10 @@ namespace Gomoku
             myStreamWriter = myProcess.StandardInput;
             myStreamReader = myProcess.StandardOutput;
 
-            client.send(CommandWords.command + " " +
-                        client.remoteEndPoint + " " +
+            client.send(localep + " " + 
+                        CommandWords.command + " " +
                         CommandWords.command_ready + " " +
-                        account() + " " + whichSide);
-            //client.send("cmd ready " + account() + " " + whichSide);
+                        whichSide);
             textBoxMsg.Text = "";
         }
 
@@ -315,7 +325,7 @@ namespace Gomoku
                 }
                 else break;
             }
-            client.send(CommandWords.playing + " " + account() + " " + output);
+            client.send(localep + " " + CommandWords.playing + " " + output);
             map[I, J] = whichSide;
             board.UpdateBoard(I, J, whichSide);
 
@@ -468,6 +478,7 @@ namespace Gomoku
             if (word[0] > 'O' || word[0] < 'A') return -1;
             return (word[0] - 'A');
         }
+
         //asld fjsadlk jfasldk jfkasd jlkfasldf jaksld jfalksd fjlaskdjfaksdfjasldkfjaskldfjlaskdjfklasdjflasdjfklasdjkflasjdfljasdklfj
     }
 }

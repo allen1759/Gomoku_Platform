@@ -16,6 +16,10 @@ namespace Gomoku
         String playerName1, playerName2;
         int whichSide1 = CommandWords.NOONE;
         int whichSide2 = CommandWords.NOONE;
+        String blackSideIP, whiteSideIP;
+        Dictionary<string, int> IPmapping = new Dictionary<string, int>();
+        Dictionary<string, string> accountmapping = new Dictionary<string, string>();
+        int countingIP = 0;
 
         public static void Main(String[] args)
         {
@@ -48,6 +52,7 @@ namespace Gomoku
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("接受一個新連線!");
                 NetSocket client = new NetSocket(socket);
+              Console.WriteLine(client.remoteEndPoint.ToString() + Environment.NewLine);
                 try
                 {
                     clientList.Add(client);
@@ -70,13 +75,17 @@ namespace Gomoku
             Console.ForegroundColor = ConsoleColor.Gray;
 
             String[] words = msg.Split(' ');
-            if (words[0] == CommandWords.command) 
+            String targetIP = words[0];
+            if (words[1] == CommandWords.command) 
             {
-                String currIP = words[1];
                 // 不檢查帳號密碼
                 if (words[2] == CommandWords.command_login) 
                 {
                     // 沒有檢查重複帳號登入
+                    String accountName = words[3];
+                    accountmapping[targetIP] = accountName;
+                    IPmapping[targetIP] = ++countingIP;
+
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(words[3] + " Login 成功");
                     foreach (NetSocket client in clientList)
@@ -89,7 +98,6 @@ namespace Gomoku
                             break;
                         }
                     }
-                    //broadCast("cmd " + words[1]);
                 }
                 // 沒有失敗的case
                 else if(words[2] == CommandWords.command_login)
@@ -111,20 +119,36 @@ namespace Gomoku
                 }
                 else if(words[2] == CommandWords.command_ready)
                 {
-                    if (playerName1 == words[3] || playerName2 == words[3])
-                        return "OK";
-                    if( whichSide1==0 )
+                    int whichside = Int32.Parse(words[3]);
+                    if (whichside == CommandWords.BLACK)
                     {
-                        playerName1 = words[3];
-                        whichSide1 = Int32.Parse(words[4]);
+                        if (blackSideIP != "")
+                        {
+        // send invalid operation!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            return "OK";
+                        }
+                        if (whiteSideIP == targetIP)
+                        {
+                            whiteSideIP = "";
+                        }
+                        blackSideIP = targetIP;
                     }
-                    else if( whichSide2==0 )
+                    else if (whichside == CommandWords.WHITE)
                     {
-                        playerName2 = words[3];
-                        whichSide2 = Int32.Parse(words[4]);
+                        if (whiteSideIP != "")
+                        {
+        // send invalid operation!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            return "OK";
+                        }
+                        if (blackSideIP == targetIP)
+                        {
+                            blackSideIP = "";
+                        }
+                        whiteSideIP = targetIP;
                     }
-
-                    if( whichSide1!=0 && whichSide2!=0)
+                    
+                    
+                    if( blackSideIP!="" && whiteSideIP!="")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("雙方成功設置");

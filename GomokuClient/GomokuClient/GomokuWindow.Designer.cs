@@ -38,8 +38,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Connect = new System.Windows.Forms.Button();
-            this.blackButton = new System.Windows.Forms.Button();
-            this.whiteButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.Ready = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -139,26 +137,6 @@
             this.Connect.UseVisualStyleBackColor = true;
             this.Connect.Click += new System.EventHandler(this.Connect_Click);
             // 
-            // blackButton
-            // 
-            this.blackButton.Location = new System.Drawing.Point(187, 153);
-            this.blackButton.Name = "blackButton";
-            this.blackButton.Size = new System.Drawing.Size(79, 23);
-            this.blackButton.TabIndex = 13;
-            this.blackButton.Text = "black";
-            this.blackButton.UseVisualStyleBackColor = true;
-            this.blackButton.Click += new System.EventHandler(this.blackButton_Click);
-            // 
-            // whiteButton
-            // 
-            this.whiteButton.Location = new System.Drawing.Point(267, 153);
-            this.whiteButton.Name = "whiteButton";
-            this.whiteButton.Size = new System.Drawing.Size(79, 23);
-            this.whiteButton.TabIndex = 14;
-            this.whiteButton.Text = "white";
-            this.whiteButton.UseVisualStyleBackColor = true;
-            this.whiteButton.Click += new System.EventHandler(this.whiteButton_Click);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -232,6 +210,7 @@
             this.identityBox.Name = "identityBox";
             this.identityBox.Size = new System.Drawing.Size(121, 20);
             this.identityBox.TabIndex = 21;
+            this.identityBox.SelectedIndexChanged += new System.EventHandler(this.identityBox_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -245,8 +224,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.Ready);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.whiteButton);
-            this.Controls.Add(this.blackButton);
             this.Controls.Add(this.Connect);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -277,8 +254,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Connect;
-        private System.Windows.Forms.Button blackButton;
-        private System.Windows.Forms.Button whiteButton;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button Ready;
         private System.Windows.Forms.Label label6;
