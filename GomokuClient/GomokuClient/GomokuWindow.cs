@@ -246,7 +246,7 @@ namespace Gomoku
                     else if (whichSide == CommandWords.WHITE)
                         myStreamWriter.WriteLine(CommandWords.play_startInfoWhite);
 
-                    if( whichSide == CommandWords.WHITE )
+                    if( whichSide == CommandWords.BLACK )
                     {
                         Thread threadToGetNextStep = new Thread(new ThreadStart(myTurn));
                         threadToGetNextStep.Name = "my turn thread";
@@ -255,7 +255,7 @@ namespace Gomoku
                 }
             }
             // message start with word: play 
-            else if(words[0]==CommandWords.playing && words[1]!=account() && whoWin==0)
+            else if(words[1]==CommandWords.playing && words[0]!=localep && whoWin==0)
             {
                 int I = getI(words[2]);
                 int J = getJ(words[3]);
@@ -271,9 +271,9 @@ namespace Gomoku
                 if( checkWin(I, J, otherSide()) )
                 {
                     // end case
-                    if (otherSide() == 1)
+                    if (otherSide() == CommandWords.BLACK)
                         MessageBox.Show("Black Side Win!!!");
-                    else if (otherSide() == 2)
+                    else if (otherSide() == CommandWords.WHITE)
                         MessageBox.Show("White Side Win!!!");
                     whoWin = otherSide();
                 }
