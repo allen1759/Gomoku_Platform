@@ -54,8 +54,6 @@ namespace Gomoku
                     map[i, j] = 0;
                 }
             }
-            blackButton.Enabled = false;
-            whiteButton.Enabled = false;
         }
         ~Form1()
         {
@@ -147,18 +145,6 @@ namespace Gomoku
                 whichSide = CommandWords.NOONE;
             }
         }
-        private void blackButton_Click(object sender, EventArgs e)
-        {
-            whichSide = CommandWords.BLACK;
-            blackButton.Enabled = false;
-            whiteButton.Enabled = false;
-        }
-        private void whiteButton_Click(object sender, EventArgs e)
-        {
-            whichSide = CommandWords.WHITE;
-            blackButton.Enabled = false;
-            whiteButton.Enabled = false;
-        }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
@@ -240,9 +226,6 @@ namespace Gomoku
                     isLogin = true;
                     Login.Enabled = false;
                     Account.Enabled = false;
-
-                    blackButton.Enabled = true;
-                    whiteButton.Enabled = true;
                 }
                 else if(words[1] == CommandWords.command_loginFail )
                 {

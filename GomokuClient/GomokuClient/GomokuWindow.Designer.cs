@@ -58,12 +58,13 @@
             // 
             // buttonSend
             // 
-            this.buttonSend.Location = new System.Drawing.Point(331, 347);
+            this.buttonSend.Location = new System.Drawing.Point(313, 345);
             this.buttonSend.Name = "buttonSend";
             this.buttonSend.Size = new System.Drawing.Size(75, 23);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send";
             this.buttonSend.UseVisualStyleBackColor = true;
+            this.buttonSend.Visible = false;
             this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
             // 
             // textBoxMsg
@@ -72,6 +73,7 @@
             this.textBoxMsg.Name = "textBoxMsg";
             this.textBoxMsg.Size = new System.Drawing.Size(128, 22);
             this.textBoxMsg.TabIndex = 3;
+            this.textBoxMsg.Visible = false;
             // 
             // Account
             // 
@@ -94,11 +96,12 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Consolas", 14F);
-            this.label1.Location = new System.Drawing.Point(12, 342);
+            this.label1.Location = new System.Drawing.Point(12, 345);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(150, 22);
             this.label1.TabIndex = 7;
             this.label1.Text = "Type message :";
+            this.label1.Visible = false;
             // 
             // IPaddr
             // 
@@ -149,7 +152,7 @@
             // 
             // Ready
             // 
-            this.Ready.Location = new System.Drawing.Point(421, 347);
+            this.Ready.Location = new System.Drawing.Point(421, 344);
             this.Ready.Name = "Ready";
             this.Ready.Size = new System.Drawing.Size(75, 23);
             this.Ready.TabIndex = 16;
