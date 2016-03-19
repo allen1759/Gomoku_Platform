@@ -142,6 +142,7 @@ namespace Gomoku
             }
             else
             {
+                // 觀察者
                 whichSide = CommandWords.NOONE;
             }
         }
@@ -186,8 +187,6 @@ namespace Gomoku
                 fileName.Text = Path.GetFileName(strPath);
             }
         }
-
-
 
 
 

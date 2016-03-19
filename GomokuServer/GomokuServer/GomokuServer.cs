@@ -116,15 +116,17 @@ namespace Gomoku
                 }
                 else if(words[2] == CommandWords.command_clear)
                 {
+                    blackSideIP = "";
+                    whiteSideIP = "";
                 }
                 else if(words[2] == CommandWords.command_ready)
                 {
                     int whichside = Int32.Parse(words[3]);
                     if (whichside == CommandWords.BLACK)
                     {
-                        if (blackSideIP != "")
+                        if (blackSideIP != null && blackSideIP != "")
                         {
-        // send invalid operation!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            // sould send invalid operation here!!!
                             return "OK";
                         }
                         if (whiteSideIP == targetIP)
@@ -135,9 +137,9 @@ namespace Gomoku
                     }
                     else if (whichside == CommandWords.WHITE)
                     {
-                        if (whiteSideIP != "")
+                        if (whiteSideIP != null && whiteSideIP != "")
                         {
-        // send invalid operation!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            // sould send invalid operation here!!!
                             return "OK";
                         }
                         if (blackSideIP == targetIP)
@@ -148,7 +150,7 @@ namespace Gomoku
                     }
                     
                     
-                    if( blackSideIP!="" && whiteSideIP!="")
+                    if( blackSideIP!="" && blackSideIP!= null && whiteSideIP!="" && whiteSideIP!=null )
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("雙方成功設置");
