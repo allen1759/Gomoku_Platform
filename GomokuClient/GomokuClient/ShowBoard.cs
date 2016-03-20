@@ -24,9 +24,9 @@ namespace Gomoku
 
         public int[,] map;
         public int[,] step;
-        int boardX = 28, boardY = 28, boardLength = 480;
-        int distance = 32, startx = 15, starty = 15;
-        int numDistx = 10, numDisty = 16;
+        int boardX = 58, boardY = 58, boardLength = 480;
+        int distance = 32, startx, starty;
+        int numDistx = 11, numDisty = 16;
 
         public delegate void myTurnHandler(String str);
         public myTurnHandler mth;
@@ -34,7 +34,9 @@ namespace Gomoku
         public ShowBoard()
         {
             InitializeComponent();
-            
+
+            startx = boardX - 13;
+            starty = boardY - 13;
             g = this.CreateGraphics();
 
             imageBoard = Image.FromFile("board.jpg");
@@ -44,32 +46,32 @@ namespace Gomoku
             mth = new myTurnHandler(AddMessage);
 
             // for test
-            step = new int[15, 15];
-            for (int i = 0; i < 15; i += 1)
-                for (int j = 0; j < 15; j += 1)
-                    step[i, j] = 0;
-            map = new int[15, 15];
-            for (int i = 0; i < 15; i += 1)
-                for (int j = 0; j < 15; j += 1)
-                    map[i, j] = 0;
-            int[] xs = new int[] { 8, 7, 6, 5, 6, 8, 5, 9, 4, 7 };
-            int[] ys = new int[] { 0, 1, 1, 1, 2, 3, 3, 4, 4, 5 };
-            int cnt = 0;
-            for (int i = 0; i < 10; i += 1)
-            {
-                map[xs[i], ys[i]] = CommandWords.BLACK;
-                step[xs[i], ys[i]] = ++cnt;
-            }
+            //step = new int[15, 15];
+            //for (int i = 0; i < 15; i += 1)
+            //    for (int j = 0; j < 15; j += 1)
+            //        step[i, j] = 0;
+            //map = new int[15, 15];
+            //for (int i = 0; i < 15; i += 1)
+            //    for (int j = 0; j < 15; j += 1)
+            //        map[i, j] = 0;
+            //int[] xs = new int[] { 8, 7, 6, 5, 6, 8, 5, 9, 4, 7 };
+            //int[] ys = new int[] { 0, 1, 1, 1, 2, 3, 3, 4, 4, 5 };
+            //int cnt = 0;
+            //for (int i = 0; i < 10; i += 1)
+            //{
+            //    map[xs[i], ys[i]] = CommandWords.BLACK;
+            //    step[xs[i], ys[i]] = ++cnt;
+            //}
             
-            xs = new int[] { 4, 7, 9, 8, 7, 6, 5, 10, 3 };
-            ys = new int[] { 1, 2, 3, 4, 4, 4, 4, 5, 5 };
-            for (int i = 0; i < 9; i += 1)
-            {
-                map[xs[i], ys[i]] = CommandWords.WHITE;
-                step[xs[i], ys[i]] = ++cnt;
-            }
+            //xs = new int[] { 4, 7, 9, 8, 7, 6, 5, 10, 3 };
+            //ys = new int[] { 1, 2, 3, 4, 4, 4, 4, 5, 5 };
+            //for (int i = 0; i < 9; i += 1)
+            //{
+            //    map[xs[i], ys[i]] = CommandWords.WHITE;
+            //    step[xs[i], ys[i]] = ++cnt;
+            //}
 
-            UpdateBoard();
+            //UpdateBoard();
             //Black: 8 B
             //White: 8 E
             //Black: 7 D
@@ -93,6 +95,15 @@ namespace Gomoku
         public void UpdateBoard()
         {
             g.DrawImage(imageBoard, boardX, boardY, boardLength, boardLength);
+            for (int i = 0; i < 15; i += 1)
+            {
+                string drawString = string.Format("{0,2}", i+1);
+                g.DrawString(drawString, ArialFont, drawBrushBlack, startx - 25, starty + numDisty + i * distance, drawFormat);
+                //g.DrawString(drawString, ArialFont, drawBrushBlack, startx + boardLength + 22, starty + numDisty + i * distance, drawFormat);
+
+                drawString = Convert.ToChar('A' + i).ToString();
+                g.DrawString(drawString, ArialFont, drawBrushBlack, startx + numDistx + i * distance + 5, starty + boardLength + 25, drawFormat);
+            }
             for (int i = 0; i < map.GetLength(0); i += 1)
             {
                 for (int j = 0; j < map.GetLength(1); j += 1)

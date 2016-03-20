@@ -26,6 +26,8 @@ namespace Gomoku
         int whichSide = CommandWords.NOONE;
         int whoWin = CommandWords.NOONE;
         int[,] map = new int[15, 15];
+        int[,] step = new int[15, 15];
+        int stepcnt;
         Process myProcess = new Process();
         StreamWriter myStreamWriter;
         StreamReader myStreamReader;
@@ -47,11 +49,13 @@ namespace Gomoku
             //allmh = new allMessageHandler(AddAllMessage);
 
             // 初始化map 空=0 黑=1 白=2 觀察者=3
+            stepcnt = 0;
             for(int i=0; i<map.GetLength(0); i += 1)
             {
                 for(int j=0; j<map.GetLength(1); j += 1)
                 {
-                    map[i, j] = 0;
+                    map[i, j] = CommandWords.NOONE;
+                    step[i, j] = 0;
                 }
             }
         }
@@ -234,6 +238,7 @@ namespace Gomoku
                 {
                     board = new ShowBoard();
                     board.map = map;
+                    board.step = step;
 
                     // board.Show(this);
                     board.Show();
@@ -260,12 +265,13 @@ namespace Gomoku
                 int I = getI(words[2]);
                 int J = getJ(words[3]);
                 map[I, J] = otherSide();
+                step[I, J] = ++stepcnt;
                 board.UpdateBoard(I, J, otherSide());
                 if (otherSide() == 1)
-                    board.Invoke(board.mth, "Black: " + words[2] + " " + words[3]);
+                    board.Invoke(board.mth, stepcnt.ToString() + "-B: " + words[2] + " " + words[3]);
                     //board.AddMessage("Black: " + words[2] + " " + words[3]);
                 else if (otherSide() == 2)
-                    board.Invoke(board.mth, "White: " + words[2] + " " + words[3]);
+                    board.Invoke(board.mth, stepcnt.ToString() + "-W: " + words[2] + " " + words[3]);
                     //board.AddMessage("White: " + words[2] + " " + words[3]);
 
                 if( checkWin(I, J, otherSide()) )
@@ -309,16 +315,17 @@ namespace Gomoku
             }
             client.send(localep + " " + CommandWords.playing + " " + output);
             map[I, J] = whichSide;
+            step[I, J] = ++stepcnt;
             board.UpdateBoard(I, J, whichSide);
 
             if (whichSide == 1)
             {
-                board.Invoke(board.mth, "Black: " + output);
+                board.Invoke(board.mth, stepcnt.ToString() + "-B: " + output);
                 //board.AddMessage("Black: " + output);
             }
             else if (whichSide == 2)
             {
-                board.Invoke(board.mth, "White: " + output);
+                board.Invoke(board.mth, stepcnt.ToString() + "-W: " + output);
                 //board.AddMessage("White: " + output);
             }
 
