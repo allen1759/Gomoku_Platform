@@ -20,7 +20,7 @@ namespace Gomoku
         StrHandler msgHandler;
         String localep;
         bool isLogin;
-        string strPath;
+        string acc_ = "", strPath, temprecord = "";
 
         ShowBoard board;
         int whichSide = CommandWords.NOONE;
@@ -106,7 +106,7 @@ namespace Gomoku
             // 防止空字串
             if (account().Length == 0)
             {
-                AllMessage.AppendText("請輸入帳號!");
+                AllMessage.AppendText("請輸入名字!");
                 return;
             }
             client.newListener(processMsgComeIn);
@@ -180,6 +180,11 @@ namespace Gomoku
                         CommandWords.command_ready + " " +
                         whichSide);
             textBoxMsg.Text = "";
+
+            if (whichSide == CommandWords.BLACK)
+                temprecord = "B" + Environment.NewLine;
+            else if (whichSide == CommandWords.WHITE)
+                temprecord = "W" + Environment.NewLine;
         }
 
         private void selectFile_Click(object sender, EventArgs e)
@@ -237,8 +242,11 @@ namespace Gomoku
                 else if(words[1] == CommandWords.command_ready )
                 {
                     board = new ShowBoard();
+                    board.UpdateName(words[2], words[3]);
+                    board.UpdateAIName(account());
                     board.map = map;
                     board.step = step;
+
 
                     // board.Show(this);
                     board.Show();
@@ -268,19 +276,32 @@ namespace Gomoku
                 step[I, J] = ++stepcnt;
                 board.UpdateBoard(I, J, otherSide());
                 if (otherSide() == 1)
+                {
                     board.Invoke(board.mth, stepcnt.ToString() + "-B: " + words[2] + " " + words[3]);
                     //board.AddMessage("Black: " + words[2] + " " + words[3]);
+                    temprecord += words[2] + " " + words[3] + Environment.NewLine;
+                }
                 else if (otherSide() == 2)
+                {
                     board.Invoke(board.mth, stepcnt.ToString() + "-W: " + words[2] + " " + words[3]);
                     //board.AddMessage("White: " + words[2] + " " + words[3]);
+                    temprecord += words[2] + " " + words[3] + Environment.NewLine;
+                }
+                File.WriteAllText(@"temp.txt", temprecord);
 
-                if( checkWin(I, J, otherSide()) )
+                if ( checkWin(I, J, otherSide()) )
                 {
                     // end case
                     if (otherSide() == CommandWords.BLACK)
-                        MessageBox.Show("Black Side Win!!!");
+                    {
+                        MessageBox.Show(board.blackName + "(Black Side) Win");
+                        board.AddMessage(Environment.NewLine + "==========" + Environment.NewLine + board.blackName + "(Black Side) Win");
+                    }
                     else if (otherSide() == CommandWords.WHITE)
-                        MessageBox.Show("White Side Win!!!");
+                    {
+                        MessageBox.Show(board.whiteName + "(White Side) Win");
+                        board.AddMessage(Environment.NewLine + "==========" + Environment.NewLine + board.whiteName + "(White Side) Win");
+                    }
                     whoWin = otherSide();
                 }
                 else
@@ -318,23 +339,27 @@ namespace Gomoku
             step[I, J] = ++stepcnt;
             board.UpdateBoard(I, J, whichSide);
 
-            if (whichSide == 1)
+            if (whichSide == CommandWords.BLACK)
             {
                 board.Invoke(board.mth, stepcnt.ToString() + "-B: " + output);
                 //board.AddMessage("Black: " + output);
+                temprecord += output + Environment.NewLine;
             }
-            else if (whichSide == 2)
+            else if (whichSide == CommandWords.WHITE)
             {
                 board.Invoke(board.mth, stepcnt.ToString() + "-W: " + output);
                 //board.AddMessage("White: " + output);
+                temprecord += output + Environment.NewLine;
             }
+            File.WriteAllText(@"temp.txt", temprecord);
 
-            if( checkWin(I, J, whichSide) )
+
+            if ( checkWin(I, J, whichSide) )
             {
                 // end case
-                if (whichSide == 1)
+                if (whichSide == CommandWords.BLACK)
                     MessageBox.Show("Black Side Win!!!");
-                else if (whichSide == 2)
+                else if (whichSide == CommandWords.WHITE)
                     MessageBox.Show("White Side Win!!!");
                 whoWin = whichSide;
             }
@@ -435,7 +460,16 @@ namespace Gomoku
         // some helper function
         private String account()
         {
-            return Account.Text.Trim();
+            if(acc_!="" && acc_!=null) 
+                return acc_;
+            for (int i = 0; i < Account.Text.Trim().Length; i += 1)
+            {
+                if (Account.Text[i] == ' ')
+                    acc_ += '_';
+                else
+                    acc_ += Account.Text.Trim()[i];
+            }
+            return acc_;
         }
 
         private String msg()

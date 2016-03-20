@@ -24,11 +24,13 @@ namespace Gomoku
 
         public int[,] map;
         public int[,] step;
-        int boardX = 58, boardY = 58, boardLength = 480;
+        public string blackName, whiteName;
+        int boardX = 58, boardY = 88, boardLength = 480;
         int distance = 32, startx, starty;
         int numDistx = 11, numDisty = 16;
 
         public delegate void myTurnHandler(String str);
+
         public myTurnHandler mth;
 
         public ShowBoard()
@@ -62,7 +64,7 @@ namespace Gomoku
             //    map[xs[i], ys[i]] = CommandWords.BLACK;
             //    step[xs[i], ys[i]] = ++cnt;
             //}
-            
+
             //xs = new int[] { 4, 7, 9, 8, 7, 6, 5, 10, 3 };
             //ys = new int[] { 1, 2, 3, 4, 4, 4, 4, 5, 5 };
             //for (int i = 0; i < 9; i += 1)
@@ -92,12 +94,24 @@ namespace Gomoku
             //White: 12 F
         }
 
+        public void UpdateAIName(String n)
+        {
+            AILabel.Text += n;
+        }
+        public void UpdateName(String b, String w)
+        {
+            blackName = b;
+            whiteName = w;
+            blackNameText.Text += b;
+            whiteNameText.Text += w;
+        }
+
         public void UpdateBoard()
         {
             g.DrawImage(imageBoard, boardX, boardY, boardLength, boardLength);
             for (int i = 0; i < 15; i += 1)
             {
-                string drawString = string.Format("{0,2}", i+1);
+                string drawString = string.Format("{0,2}", 15-i);
                 g.DrawString(drawString, ArialFont, drawBrushBlack, startx - 25, starty + numDisty + i * distance, drawFormat);
                 //g.DrawString(drawString, ArialFont, drawBrushBlack, startx + boardLength + 22, starty + numDisty + i * distance, drawFormat);
 
@@ -136,6 +150,17 @@ namespace Gomoku
             }
         }
 
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            String file = blackName + " vs " + whiteName + DateTime.Now.ToString("yyyyMMddHHmmss");
+            String title = "==================================================" + Environment.NewLine +
+                           blackNameText + Environment.NewLine +
+                           whiteNameText + Environment.NewLine +
+                           "==================================================" + Environment.NewLine;
+            File.WriteAllText(@file + ".txt", title + battle.Text);
+            MessageBox.Show("Save to [" + file + ".txt]");
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             UpdateBoard();
@@ -156,10 +181,6 @@ namespace Gomoku
         public void AddMessage(String str)
         {
             battle.AppendText(str + Environment.NewLine);
-        }
-        public void SetCurrentStep(String str)
-        {
-            currentStep.AppendText(str);
         }
     }
 }

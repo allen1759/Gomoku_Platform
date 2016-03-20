@@ -58,6 +58,7 @@
             // 
             // buttonSend
             // 
+            this.buttonSend.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.buttonSend.Location = new System.Drawing.Point(313, 345);
             this.buttonSend.Name = "buttonSend";
             this.buttonSend.Size = new System.Drawing.Size(75, 23);
@@ -69,21 +70,24 @@
             // 
             // textBoxMsg
             // 
+            this.textBoxMsg.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.textBoxMsg.Location = new System.Drawing.Point(168, 346);
             this.textBoxMsg.Name = "textBoxMsg";
-            this.textBoxMsg.Size = new System.Drawing.Size(128, 22);
+            this.textBoxMsg.Size = new System.Drawing.Size(128, 23);
             this.textBoxMsg.TabIndex = 3;
             this.textBoxMsg.Visible = false;
             // 
             // Account
             // 
+            this.Account.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Account.Location = new System.Drawing.Point(187, 75);
             this.Account.Name = "Account";
-            this.Account.Size = new System.Drawing.Size(159, 22);
+            this.Account.Size = new System.Drawing.Size(159, 23);
             this.Account.TabIndex = 4;
             // 
             // Login
             // 
+            this.Login.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Login.Location = new System.Drawing.Point(370, 76);
             this.Login.Name = "Login";
             this.Login.Size = new System.Drawing.Size(75, 23);
@@ -105,9 +109,10 @@
             // 
             // IPaddr
             // 
+            this.IPaddr.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.IPaddr.Location = new System.Drawing.Point(187, 33);
             this.IPaddr.Name = "IPaddr";
-            this.IPaddr.Size = new System.Drawing.Size(159, 22);
+            this.IPaddr.Size = new System.Drawing.Size(159, 23);
             this.IPaddr.TabIndex = 8;
             // 
             // label2
@@ -124,14 +129,15 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Consolas", 14F);
-            this.label3.Location = new System.Drawing.Point(82, 76);
+            this.label3.Location = new System.Drawing.Point(112, 75);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 22);
+            this.label3.Size = new System.Drawing.Size(50, 22);
             this.label3.TabIndex = 10;
-            this.label3.Text = "Account";
+            this.label3.Text = "Name";
             // 
             // Connect
             // 
+            this.Connect.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Connect.Location = new System.Drawing.Point(370, 31);
             this.Connect.Name = "Connect";
             this.Connect.Size = new System.Drawing.Size(75, 23);
@@ -152,6 +158,7 @@
             // 
             // Ready
             // 
+            this.Ready.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Ready.Location = new System.Drawing.Point(421, 344);
             this.Ready.Name = "Ready";
             this.Ready.Size = new System.Drawing.Size(75, 23);
@@ -172,6 +179,7 @@
             // 
             // selectFile
             // 
+            this.selectFile.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.selectFile.Location = new System.Drawing.Point(370, 190);
             this.selectFile.Name = "selectFile";
             this.selectFile.Size = new System.Drawing.Size(75, 23);
@@ -182,9 +190,10 @@
             // 
             // fileName
             // 
+            this.fileName.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.fileName.Location = new System.Drawing.Point(187, 192);
             this.fileName.Name = "fileName";
-            this.fileName.Size = new System.Drawing.Size(159, 22);
+            this.fileName.Size = new System.Drawing.Size(159, 23);
             this.fileName.TabIndex = 19;
             // 
             // openFileDlg
@@ -193,17 +202,20 @@
             // 
             // clearButton
             // 
+            this.clearButton.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.clearButton.Location = new System.Drawing.Point(370, 153);
             this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(79, 23);
+            this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 20;
             this.clearButton.Text = "Clear";
             this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Visible = false;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // identityBox
             // 
             this.identityBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.identityBox.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.identityBox.FormattingEnabled = true;
             this.identityBox.Items.AddRange(new object[] {
             "Black (黑方)",
@@ -211,7 +223,7 @@
             "Spectator (觀察者)"});
             this.identityBox.Location = new System.Drawing.Point(187, 123);
             this.identityBox.Name = "identityBox";
-            this.identityBox.Size = new System.Drawing.Size(121, 20);
+            this.identityBox.Size = new System.Drawing.Size(121, 24);
             this.identityBox.TabIndex = 21;
             this.identityBox.SelectedIndexChanged += new System.EventHandler(this.identityBox_SelectedIndexChanged);
             // 

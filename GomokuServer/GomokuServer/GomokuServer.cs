@@ -90,30 +90,32 @@ namespace Gomoku
                     Console.WriteLine(words[3] + " Login 成功");
                     foreach (NetSocket client in clientList)
                     {
-                        if (client.name=="")
+                        if (targetIP==client.remoteEndPoint.ToString())
+                        //if (client.name=="")
                         {
                             client.name = words[3];
-                            Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
+                            Console.WriteLine("Send personal meessage to " + accountName + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
+                            //Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
                             client.send(CommandWords.command + " " + CommandWords.command_loginSuce);
                             break;
                         }
                     }
                 }
                 // 沒有失敗的case
-                else if(words[2] == CommandWords.command_login)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(words[3] + " Login 失敗");
-                    foreach (NetSocket client in clientList)
-                    {
-                        if(client.name=="")
-                        {
-                            // Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
-                            client.send(CommandWords.command + " " + CommandWords.command_loginFail);
-                            break;
-                        }
-                    }
-                }
+                //else if(words[2] == CommandWords.command_login)
+                //{
+                //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                //    Console.WriteLine(words[3] + " Login 失敗");
+                //    foreach (NetSocket client in clientList)
+                //    {
+                //        if(client.name=="")
+                //        {
+                //            // Console.WriteLine("Send personal meessage to " + client.name + "(" + client.remoteEndPoint.ToString() + ") :" + msg);
+                //            client.send(CommandWords.command + " " + CommandWords.command_loginFail);
+                //            break;
+                //        }
+                //    }
+                //}
                 else if(words[2] == CommandWords.command_clear)
                 {
                     blackSideIP = "";
@@ -154,7 +156,7 @@ namespace Gomoku
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("雙方成功設置");
-                        broadCast(CommandWords.command + " " + CommandWords.command_ready);
+                        broadCast(CommandWords.command + " " + CommandWords.command_ready + " " + accountmapping[blackSideIP] + " " + accountmapping[whiteSideIP] + " .");
                     }
                 }
                 else
