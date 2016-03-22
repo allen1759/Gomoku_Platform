@@ -154,8 +154,8 @@ namespace Gomoku
         {
             String file = blackName + " vs " + whiteName + DateTime.Now.ToString("yyyyMMddHHmmss");
             String title = "==================================================" + Environment.NewLine +
-                           blackNameText + Environment.NewLine +
-                           whiteNameText + Environment.NewLine +
+                           blackNameText.Text + Environment.NewLine +
+                           whiteNameText.Text + Environment.NewLine +
                            "==================================================" + Environment.NewLine;
             File.WriteAllText(@file + ".txt", title + battle.Text);
             MessageBox.Show("Save to [" + file + ".txt]");
